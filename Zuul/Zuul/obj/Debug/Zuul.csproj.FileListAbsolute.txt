@@ -5,3 +5,10 @@ C:\Users\Ruben Engelage\Desktop\4_Textadventure [GD]\Zuul\Zuul\Zuul\obj\Debug\Zu
 C:\Users\Ruben Engelage\Desktop\4_Textadventure [GD]\Zuul\Zuul\Zuul\obj\Debug\Zuul.csproj.CoreCompileInputs.cache
 C:\Users\Ruben Engelage\Desktop\4_Textadventure [GD]\Zuul\Zuul\Zuul\obj\Debug\Zuul.exe
 C:\Users\Ruben Engelage\Desktop\4_Textadventure [GD]\Zuul\Zuul\Zuul\obj\Debug\Zuul.pdb
+C:\Users\Ruben Engelage\Desktop\Text_Adventure_GIT\ZUUL\Zuul\Zuul\bin\Debug\Zuul.exe.config
+C:\Users\Ruben Engelage\Desktop\Text_Adventure_GIT\ZUUL\Zuul\Zuul\bin\Debug\Zuul.exe
+C:\Users\Ruben Engelage\Desktop\Text_Adventure_GIT\ZUUL\Zuul\Zuul\bin\Debug\Zuul.pdb
+C:\Users\Ruben Engelage\Desktop\Text_Adventure_GIT\ZUUL\Zuul\Zuul\obj\Debug\Zuul.csprojAssemblyReference.cache
+C:\Users\Ruben Engelage\Desktop\Text_Adventure_GIT\ZUUL\Zuul\Zuul\obj\Debug\Zuul.csproj.CoreCompileInputs.cache
+C:\Users\Ruben Engelage\Desktop\Text_Adventure_GIT\ZUUL\Zuul\Zuul\obj\Debug\Zuul.exe
+C:\Users\Ruben Engelage\Desktop\Text_Adventure_GIT\ZUUL\Zuul\Zuul\obj\Debug\Zuul.pdb
