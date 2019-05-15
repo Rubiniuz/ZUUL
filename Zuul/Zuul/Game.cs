@@ -55,9 +55,9 @@ namespace ZuulCS
 			// execute them until the game is over.
 			bool finished = false;
 			while (! finished) {
-				Command command = parser.getCommand();
-				finished = processCommand(command);
-			}
+                Command command = parser.getCommand();
+                finished = processCommand(command);
+            }
 			Console.WriteLine("Thank you for playing.");
 		}
 
@@ -94,10 +94,18 @@ namespace ZuulCS
 					printHelp();
 					break;
 				case "go":
-					goRoom(command);
+                    if (player.IsAlive() == false)
+                    {
+                        Console.WriteLine("You died.");
+                        wantToQuit = true;
+                    }
+                    goRoom(command);
 					break;
                 case "look":
                     Console.WriteLine(player.GetCurrentRoom().getLongDescription());
+                    break;
+                case "status":
+                    Console.WriteLine(player.Status());
                     break;
                 case "quit":
 					wantToQuit = true;
@@ -144,7 +152,7 @@ namespace ZuulCS
 				Console.WriteLine("There is no door to "+direction+"!");
 			} else {
                 player.SetCurrentRoom(nextRoom);
-
+                player.Damage(15);
                 Console.WriteLine(player.GetCurrentRoom().getLongDescription());
 			}
 		}
