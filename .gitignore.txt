@@ -1,6 +1,0 @@
-*.exe
-*doc
-*.zip
-*bin
-*obj
-*Properties
