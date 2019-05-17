@@ -94,13 +94,9 @@ namespace ZuulCS
 					printHelp();
 					break;
 				case "go":
-                    if (player.IsAlive() == false)
-                    {
-                        Console.WriteLine("You died.");
-                        wantToQuit = true;
-                    }
+                    player.IsAlive();
                     goRoom(command);
-					break;
+                    break;
                 case "look":
                     Console.WriteLine(player.GetCurrentRoom().getLongDescription());
                     break;
@@ -151,9 +147,16 @@ namespace ZuulCS
 			if (nextRoom == null) {
 				Console.WriteLine("There is no door to "+direction+"!");
 			} else {
-                player.SetCurrentRoom(nextRoom);
-                player.Damage(15);
-                Console.WriteLine(player.GetCurrentRoom().getLongDescription());
+                if (player.IsAlive())
+                {
+                    player.SetCurrentRoom(nextRoom);
+                    player.Damage(15);
+                    Console.WriteLine(player.GetCurrentRoom().getLongDescription());
+                }
+                else
+                {
+                    Console.WriteLine("you died " + player.GetCurrentRoom().getLongDescription());
+                }
 			}
 		}
 

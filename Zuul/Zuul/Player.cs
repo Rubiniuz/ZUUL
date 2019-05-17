@@ -11,7 +11,7 @@ namespace Zuul
     {
         private int health = 100;
         private Room currentRoom;
-        private bool isAlive = true;
+        private bool isAlive;
         public Player()
         {
             
@@ -49,7 +49,7 @@ namespace Zuul
         }
         public bool IsAlive()
         {
-            if (health < 0)
+            if (health <= 0)
             {
                 isAlive = false;
             }
