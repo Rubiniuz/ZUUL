@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using Zuul;
 
 namespace ZuulCS
 {
 	public class Room
 	{
-		private string description;
+        private List<Item> inventory = new List<Item>();
+        private string description;
 		private Dictionary<string, Room> exits; // stores exits of this room.
 
 		/**
@@ -46,14 +48,48 @@ namespace ZuulCS
 			returnstring += description;
 			returnstring += ".\n";
 			returnstring += getExitstring();
-			return returnstring;
+            return returnstring;
 		}
 
-		/**
+        public Item RemoveItem(string n)
+        {
+            Item item;
+            for (int i = 0; i < inventory.Count; i++)
+            {
+                if (inventory[i].GetName() == n)
+                {
+                    item = inventory[i];
+                    inventory.RemoveAt(i);
+                    return item;
+                }
+            }
+            return null;
+        }
+        public void AddItem(Item item)
+        {
+            inventory.Add(item);
+        }
+
+        public string GetInventory()
+        {
+            string inv = "";
+            for (int i = 0; i < inventory.Count; i++)
+            {
+                inv += inventory[i].GetName() + ", ";
+            }
+            if (inv == "")
+            {
+                string empty = "The inventory is empty.";
+                return empty;
+            }
+            return inv;
+        }
+
+        /**
 	     * Return a string describing the room's exits, for example
 	     * "Exits: north, west".
 	     */
-		private string getExitstring()
+        private string getExitstring()
 		{
 			string returnstring = "Exits:";
 

@@ -17,6 +17,8 @@ namespace ZuulCS
 				"quit",
                 "look",
                 "status",
+                "take",
+                "drop",
                 "help"
 			};
 		}

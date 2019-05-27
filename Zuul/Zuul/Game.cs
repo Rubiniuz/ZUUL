@@ -17,7 +17,7 @@ namespace ZuulCS
 
 		private void createRooms()
 		{
-			Room outside, theatre, pub, lab, office;
+			Room outside, theatre, pub, lab, office, movieRoom;
 
 			// create the rooms
 			outside = new Room("outside the main entrance of the university");
@@ -25,15 +25,21 @@ namespace ZuulCS
 			pub = new Room("in the campus pub");
 			lab = new Room("in a computing lab");
 			office = new Room("in the computing admin office");
+            movieRoom = new Room("in the movie player room");
 
-			// initialise room exits
-			outside.setExit("east", theatre);
+            // initialise room exits
+            outside.setExit("east", theatre);
 			outside.setExit("south", lab);
 			outside.setExit("west", pub);
+            outside.AddItem(new Item("Axe", "A fireman's axe with a dull blade", 10.0f));
+            outside.AddItem(new Item("Lighter", "A worn out lighter", 2.0f));
 
-			theatre.setExit("west", outside);
+            theatre.setExit("west", outside);
+            theatre.setExit("up", movieRoom);
 
-			pub.setExit("east", outside);
+            movieRoom.setExit("down", theatre);
+
+            pub.setExit("east", outside);
 
 			lab.setExit("north", outside);
 			lab.setExit("east", office);
@@ -99,9 +105,20 @@ namespace ZuulCS
                     break;
                 case "look":
                     Console.WriteLine(player.GetCurrentRoom().getLongDescription());
+                    Console.WriteLine(player.GetCurrentRoom().GetInventory());
                     break;
                 case "status":
                     Console.WriteLine(player.Status());
+                    Console.WriteLine(player.GetInventory());
+                    break;
+                case "take":
+                    if (player.GetWeight() <= player.GetCarryLimit())
+                    {
+                        Take(command);
+                    }
+                    break;
+                case "drop":
+                    Drop(command);
                     break;
                 case "quit":
 					wantToQuit = true;
@@ -160,5 +177,69 @@ namespace ZuulCS
 			}
 		}
 
-	}
+        private void Take(Command command)
+        {
+            if (!command.hasSecondWord())
+            {
+                // if there is no second word, we don't know where to go...
+                Console.WriteLine("Take what?");
+                return;
+            }
+
+            string item = command.getSecondWord();
+
+            // Try to leave current room.
+            Item toTake = player.GetCurrentRoom().RemoveItem(item);
+
+            if (item == null)
+            {
+                Console.WriteLine("There is no item with this name: " + item + "!");
+            }
+            else
+            {
+                if (player.IsAlive())
+                {
+                    player.AddItem(toTake);
+                    player.AddWeight(toTake.GetWeight());
+                    Console.WriteLine("player added: " + toTake.GetLongDescription());
+                }
+                else
+                {
+                    Console.WriteLine("you died " + player.GetCurrentRoom().getLongDescription());
+                }
+            }
+        }
+
+        private void Drop(Command command)
+        {
+            if (!command.hasSecondWord())
+            {
+                // if there is no second word, we don't know where to go...
+                Console.WriteLine("Drop what?");
+                return;
+            }
+
+            string item = command.getSecondWord();
+
+            // Try to leave current room.
+            Item toDrop = player.RemoveItem(item);
+
+            if (item == null)
+            {
+                Console.WriteLine("There is no item with this name: " + item + "!");
+            }
+            else
+            {
+                if (player.IsAlive())
+                {
+                    player.GetCurrentRoom().AddItem(toDrop);
+                    Console.WriteLine("player dropped: " + toDrop.GetLongDescription());
+                }
+                else
+                {
+                    Console.WriteLine("you died " + player.GetCurrentRoom().getLongDescription());
+                }
+            }
+        }
+    }
 }
