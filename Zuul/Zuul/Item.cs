@@ -11,6 +11,7 @@ namespace Zuul
         private string name;
         private string description;
         private float weight;
+        private string effect;
         public Item(string n , string d , float w)
         {
             name = n;
@@ -36,7 +37,21 @@ namespace Zuul
         {
             string longDescription = name + ". the item is: " + description + ". this item weighs: " + weight.ToString() + ".";
             return longDescription;
-        }       
-
+        }
+        public void SetEffect(string e)
+        {
+            effect = e;
+        }
+        public int Use()
+        {
+            switch (effect)
+            {
+                case "heal":
+                    return +10;
+                case "damage":
+                    return -10;
+            }
+            return 0;
+        }
     }
 }

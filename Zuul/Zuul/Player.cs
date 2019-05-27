@@ -58,6 +58,19 @@ namespace Zuul
         {
             inventory.Add(item);
         }
+        public Item GetItem(string n)
+        {
+            Item item;
+            for (int i = 0; i < inventory.Count; i++)
+            {
+                if (inventory[i].GetName() == n)
+                {
+                    item = inventory[i];
+                    return item;
+                }
+            }
+            return null;
+        }
         public string GetInventory()
         {
             string inv = "";
@@ -79,7 +92,7 @@ namespace Zuul
             {
                 return "The player is not alive";
             }
-            return "The Player is alive." + " The Player has: " + health.ToString() + " health remaining.";
+            return "The Player is alive." + " The Player has: " + health.ToString() + " health remaining. The Player has: " + (carryLimit - weight).ToString() + " weight remaining.";
         }
         public bool IsAlive()
         {
@@ -105,6 +118,11 @@ namespace Zuul
         public float GetCarryLimit()
         {
             return carryLimit;
+        }
+
+        public void UseItem(Item i)
+        {
+            Heal(i.Use());
         }
     }
 }

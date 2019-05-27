@@ -32,7 +32,9 @@ namespace ZuulCS
 			outside.setExit("south", lab);
 			outside.setExit("west", pub);
             outside.AddItem(new Item("Axe", "A fireman's axe with a dull blade", 10.0f));
-            outside.AddItem(new Item("Lighter", "A worn out lighter", 2.0f));
+            Item lighter = new Item("Lighter", "A worn out lighter", 2.0f);
+            lighter.SetEffect("damage");
+            outside.AddItem(lighter);
 
             theatre.setExit("west", outside);
             theatre.setExit("up", movieRoom);
@@ -119,6 +121,9 @@ namespace ZuulCS
                     break;
                 case "drop":
                     Drop(command);
+                    break;
+                case "use":
+                    Use(command);
                     break;
                 case "quit":
 					wantToQuit = true;
@@ -234,6 +239,39 @@ namespace ZuulCS
                 {
                     player.GetCurrentRoom().AddItem(toDrop);
                     Console.WriteLine("player dropped: " + toDrop.GetLongDescription());
+                }
+                else
+                {
+                    Console.WriteLine("you died " + player.GetCurrentRoom().getLongDescription());
+                }
+            }
+        }
+        private void Use(Command command)
+        {
+            if (!command.hasSecondWord())
+            {
+                // if there is no second word, we don't know where to go...
+                Console.WriteLine("Use what?");
+                return;
+            }
+
+            string item = command.getSecondWord();
+
+            // Try to leave current room.
+            Item toUse = player.GetItem(item);
+
+            if (item == null)
+            {
+                Console.WriteLine("There is no item with this name: " + item + "!");
+            }
+            else
+            {
+                if (player.IsAlive())
+                {
+                    player.UseItem(toUse);
+                    player.AddWeight(-toUse.GetWeight());
+                    player.RemoveItem(item);
+                    Console.WriteLine("player used: " + toUse.GetLongDescription());
                 }
                 else
                 {

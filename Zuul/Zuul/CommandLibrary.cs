@@ -19,6 +19,7 @@ namespace ZuulCS
                 "status",
                 "take",
                 "drop",
+                "use",
                 "help"
 			};
 		}
