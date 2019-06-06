@@ -11,6 +11,10 @@ namespace ZuulCS
 		public Game ()
 		{
             player = new Player();
+            Weapon rock = new Weapon("Rock", "A blunt rock with sharp edges used to smash heads and gather resources", 25, 15.0f, 10);
+            Item torch = new Item("Torch", "A torch that can be lit", 10, 7.5f);
+            player.GetInventory().AddItem(rock);
+            player.GetInventory().AddItem(torch);
             parser = new Parser();
             createRooms();
 		}
@@ -23,9 +27,9 @@ namespace ZuulCS
 			beach = new Room("at the beach the spawn place for all nakeds");
 			mainRoad = new Room("on the mainRoad looking for glory");
 			spermket = new Room("in the local spermket");
-			sewerBranch = new Room("in the sewerBranch.");
+			sewerBranch = new Room("in the sewerBranch");
 			gasStation = new Room("in the ruined gasStation");
-            launchsite = new Room("in the high tier player area.");
+            launchsite = new Room("in the high tier player area");
 
             // initialise room exits and give items to rooms
             beach.setExit("east", mainRoad);
@@ -34,19 +38,36 @@ namespace ZuulCS
 
             mainRoad.setExit("west", beach);
             mainRoad.setExit("north", launchsite);
+            Food chocolatebar, apples, waterbottle;
+            chocolatebar = new Food("Chocolate","A chocolate bar made out of cocoa milk and sugar.",1,5.0f,10);
+            apples = new Food("Apples", "A pair of fresh apples", 3, 15.0f, 5);
+            waterbottle = new Food("Water", "A water bottle replenishes thirst but does nothing", 1, 5.0f, 0);
+            mainRoad.GetInventory().AddItem(chocolatebar);
+            mainRoad.GetInventory().AddItem(apples);
+            mainRoad.GetInventory().AddItem(waterbottle);
 
             launchsite.setExit("south", mainRoad);
-            launchsite.isLocked();
+            launchsite.LockRoom();
+            Weapon Machete = new Weapon("Machete","A sharpend machete. This is a knife!",25,20.5f,45);
 
             spermket.setExit("east", beach);
-            Key key = new Key("Keycard", "A Green Keycard", 5, 5.0f);
-            spermket.GetInventory().AddItem(key);
+            Key greenkey = new Key("GreenKeycard", "A Green Keycard", 5, 5.0f);
+            spermket.GetInventory().AddItem(greenkey);
 
             gasStation.setExit("north", beach);
             gasStation.setExit("east", sewerBranch);
+            Food proteinbar, berries, soda;
+            proteinbar = new Food("Proteinbar", "A protein bar made out of fibers and raisins.", 1, 5.0f, 10);
+            berries = new Food("Berries", "A pair of fresh berries", 3, 15.0f, 5);
+            soda = new Food("Soda", "A soda can replenishes thirst", 1, 5.0f, 5);
+            gasStation.GetInventory().AddItem(proteinbar);
+            gasStation.GetInventory().AddItem(berries);
+            gasStation.GetInventory().AddItem(soda);
 
             sewerBranch.setExit("west", gasStation);
             sewerBranch.LockRoom();
+            Key bluekey = new Key("BlueKeycard", "A Blue Keycard", 5, 5.0f);
+            sewerBranch.GetInventory().AddItem(bluekey);
             player.SetCurrentRoom(beach);  // start game at beach
 		}
 
@@ -214,7 +235,14 @@ namespace ZuulCS
                 if (player.IsAlive())
                 {
                     player.GetInventory().AddItem(toTake);
-                    Console.WriteLine("player added: " + toTake.GetLongDescription());
+                    if (toTake != null)
+                    {
+                        Console.WriteLine("player added: " + toTake.GetLongDescription());
+                    }
+                    else
+                    {
+                        Console.WriteLine("There is no item with this name!");
+                    }
                 }
                 else
                 {

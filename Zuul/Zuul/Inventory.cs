@@ -31,19 +31,29 @@ namespace Zuul
         public Item RemoveItem(string n)
         {
             Item item;
-            if (inventory[n] != null)
+            if (inventory.ContainsKey(n))
             {
                 item = inventory[n];
                 this.AddWeight(-item.GetWeight());
                 inventory.Remove(n);
                 return item;
             }
-            return null;
+            else
+            {
+                return null;
+            }
         }
         public void AddItem(Item item)
         {
-            inventory[item.GetName()] = item;
-            this.AddWeight(item.GetWeight());
+            if (item == null)
+            {
+
+            }
+            else
+            {
+                inventory[item.GetName()] = item;
+                this.AddWeight(item.GetWeight());
+            }
         }
         public Item GetItem(string n)
         {

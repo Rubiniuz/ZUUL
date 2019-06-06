@@ -24,7 +24,7 @@ namespace Zuul
         public override string GetUseDescription()
         {
             string useDescription = "";
-            useDescription = this.name + " and you lost:" + this.healing.ToString() + "health";
+            useDescription = this.name + " and you gain:" + this.healing.ToString() + "health";
             return useDescription;
         }
 
