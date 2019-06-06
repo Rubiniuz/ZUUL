@@ -11,12 +11,13 @@ namespace Zuul
         private string name;
         private string description;
         private float weight;
-        private string effect;
-        public Item(string n , string d , float w)
+        private int uses;
+        public Item(string name , string description , int uses , float weight)
         {
-            name = n;
-            description = d;
-            weight = w;
+            this.name = name;
+            this.description = description;
+            this.uses = uses;
+            this.weight = weight;
         }
 
         public float GetWeight()
@@ -26,6 +27,16 @@ namespace Zuul
         public string GetName()
         {
             return name;
+        }
+
+        public int GetUses()
+        {
+            int u = this.uses;
+            return u;
+        }
+        public void SetUses(int u)
+        {
+            this.uses = u;
         }
 
         public string GetShortDescription()
@@ -38,20 +49,17 @@ namespace Zuul
             string longDescription = name + ". the item is: " + description + ". this item weighs: " + weight.ToString() + ".";
             return longDescription;
         }
-        public void SetEffect(string e)
+        public virtual string GetUseDescription()
         {
-            effect = e;
+            string useDescription = "";
+            useDescription = "you used: " + this.name;
+            return useDescription;
         }
-        public int Use()
+        
+        public virtual void Use(Player p)
         {
-            switch (effect)
-            {
-                case "heal":
-                    return +10;
-                case "damage":
-                    return -10;
-            }
-            return 0;
+            this.uses--;
+            Console.WriteLine(GetUseDescription());
         }
     }
 }

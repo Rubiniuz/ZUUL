@@ -9,9 +9,7 @@ namespace Zuul
 {
     public class Player
     {
-        private List<Item> inventory = new List<Item>();
-        private float carryLimit = 100;
-        private float weight = 0;
+        private Inventory inventory = new Inventory(100);
         private int health = 100;
         private Room currentRoom;
         private bool isAlive;
@@ -40,59 +38,13 @@ namespace Zuul
             this.health -= d;
         }
 
-        public Item RemoveItem(string n)
-        {
-            Item item;
-            for (int i = 0; i < inventory.Count; i++)
-            {
-                if (inventory[i].GetName() == n)
-                {
-                    item = inventory[i];
-                    inventory.RemoveAt(i);
-                    return item;
-                }
-            }
-            return null;
-        }
-        public void AddItem(Item item)
-        {
-            inventory.Add(item);
-        }
-        public Item GetItem(string n)
-        {
-            Item item;
-            for (int i = 0; i < inventory.Count; i++)
-            {
-                if (inventory[i].GetName() == n)
-                {
-                    item = inventory[i];
-                    return item;
-                }
-            }
-            return null;
-        }
-        public string GetInventory()
-        {
-            string inv = "";
-            for (int i = 0; i < inventory.Count; i++)
-            {
-                inv += inventory[i].GetName() + ", ";
-            }
-            if (inv == "")
-            {
-                string empty = "The inventory is empty.";
-                return empty;
-            }
-            return inv;
-        }
-
         public string Status()
         {
             if (IsAlive() == false)
             {
                 return "The player is not alive";
             }
-            return "The Player is alive." + " The Player has: " + health.ToString() + " health remaining. The Player has: " + (carryLimit - weight).ToString() + " weight remaining.";
+            return "The Player is alive." + " The Player has: " + health.ToString() + " health remaining. The Player has: " + (inventory.GetCarryLimit() - inventory.GetWeight()).ToString() + " weight remaining.";
         }
         public bool IsAlive()
         {
@@ -106,23 +58,18 @@ namespace Zuul
             }
             return isAlive;
         }
-
-        public float GetWeight()
+        public float GetHealth()
         {
-            return weight;
+            return health;
         }
-        public void AddWeight(float w)
+        public void SetHealth(int h)
         {
-            weight += w;
-        }
-        public float GetCarryLimit()
-        {
-            return carryLimit;
+            health = h;
         }
 
-        public void UseItem(Item i)
+        public Inventory GetInventory()
         {
-            Heal(i.Use());
+            return this.inventory;
         }
     }
 }
