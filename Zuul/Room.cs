@@ -5,8 +5,9 @@ namespace ZuulCS
 {
 	public class Room
 	{
-        private List<Item> inventory = new List<Item>();
+        Inventory inventory = new Inventory(100);
         private string description;
+        private bool locked;
 		private Dictionary<string, Room> exits; // stores exits of this room.
 
 		/**
@@ -27,12 +28,25 @@ namespace ZuulCS
 		{
 			exits[direction] = neighbor;
 		}
+        public void LockRoom()
+        {
+            this.locked = true;
+        }
+        public void UnLockRoom()
+        {
+            this.locked = false;
+        }
 
-		/**
+        public bool isLocked()
+        {
+            return locked;
+        }
+
+        /**
 	     * Return the description of the room (the one that was defined in the
 	     * constructor).
 	     */
-		public string getShortDescription()
+        public string getShortDescription()
 		{
 			return description;
 		}
@@ -50,40 +64,6 @@ namespace ZuulCS
 			returnstring += getExitstring();
             return returnstring;
 		}
-
-        public Item RemoveItem(string n)
-        {
-            Item item;
-            for (int i = 0; i < inventory.Count; i++)
-            {
-                if (inventory[i].GetName() == n)
-                {
-                    item = inventory[i];
-                    inventory.RemoveAt(i);
-                    return item;
-                }
-            }
-            return null;
-        }
-        public void AddItem(Item item)
-        {
-            inventory.Add(item);
-        }
-
-        public string GetInventory()
-        {
-            string inv = "";
-            for (int i = 0; i < inventory.Count; i++)
-            {
-                inv += inventory[i].GetName() + ", ";
-            }
-            if (inv == "")
-            {
-                string empty = "The inventory is empty.";
-                return empty;
-            }
-            return inv;
-        }
 
         /**
 	     * Return a string describing the room's exits, for example
@@ -118,5 +98,9 @@ namespace ZuulCS
 			}
 
 		}
-	}
+        public Inventory GetInventory()
+        {
+            return inventory;
+        }
+    }
 }

@@ -11,46 +11,64 @@ namespace ZuulCS
 		public Game ()
 		{
             player = new Player();
+            Weapon rock = new Weapon("Rock", "A blunt rock with sharp edges used to smash heads and gather resources", 25, 15.0f, 10);
+            Item torch = new Item("Torch", "A torch that can be lit", 10, 7.5f);
+            player.GetInventory().AddItem(rock);
+            player.GetInventory().AddItem(torch);
             parser = new Parser();
             createRooms();
 		}
 
 		private void createRooms()
 		{
-			Room outside, theatre, pub, lab, office, movieRoom;
+			Room beach, mainRoad, spermket, sewerBranch, gasStation, launchsite;
 
 			// create the rooms
-			outside = new Room("outside the main entrance of the university");
-			theatre = new Room("in a lecture theatre");
-			pub = new Room("in the campus pub");
-			lab = new Room("in a computing lab.");
-			office = new Room("in the computing admin office");
-            movieRoom = new Room("in the movie player room");
+			beach = new Room("at the beach the spawn place for all nakeds");
+			mainRoad = new Room("on the mainRoad looking for glory");
+			spermket = new Room("in the local spermket");
+			sewerBranch = new Room("in the sewerBranch");
+			gasStation = new Room("in the ruined gasStation");
+            launchsite = new Room("in the high tier player area");
 
-            // initialise room exits
-            outside.setExit("east", theatre);
-			outside.setExit("south", lab);
-			outside.setExit("west", pub);
-            Weapon axe = new Weapon("Axe", "A fireman's axe with a dull blade", 6 , 10.0f , 10);
-            outside.AddItem(axe);
-            BadItem lighter = new BadItem("Lighter", "A worn out lighter", 1 , 2.0f , 25);
-            outside.AddItem(lighter);
+            // initialise room exits and give items to rooms
+            beach.setExit("east", mainRoad);
+			beach.setExit("south", sewerBranch);
+			beach.setExit("west", spermket);
 
-            theatre.setExit("west", outside);
-            theatre.setExit("up", movieRoom);
+            mainRoad.setExit("west", beach);
+            mainRoad.setExit("north", launchsite);
+            Food chocolatebar, apples, waterbottle;
+            chocolatebar = new Food("Chocolate","A chocolate bar made out of cocoa milk and sugar.",1,5.0f,10);
+            apples = new Food("Apples", "A pair of fresh apples", 3, 15.0f, 5);
+            waterbottle = new Food("Water", "A water bottle replenishes thirst but does nothing", 1, 5.0f, 0);
+            mainRoad.GetInventory().AddItem(chocolatebar);
+            mainRoad.GetInventory().AddItem(apples);
+            mainRoad.GetInventory().AddItem(waterbottle);
 
-            movieRoom.setExit("down", theatre);
+            launchsite.setExit("south", mainRoad);
+            launchsite.LockRoom();
+            Weapon Machete = new Weapon("Machete","A sharpend machete. This is a knife!",25,20.5f,45);
 
-            pub.setExit("east", outside);
+            spermket.setExit("east", beach);
+            Key greenkey = new Key("GreenKeycard", "A Green Keycard", 5, 5.0f);
+            spermket.GetInventory().AddItem(greenkey);
 
-            lab.setExit("north", outside);
-			lab.setExit("east", office);
-            Food taco = new Food("Taco", "A delicous meal. used to bargain with crazy dave", 1 , 5 , 10);
-            lab.AddItem(taco);
+            gasStation.setExit("north", beach);
+            gasStation.setExit("east", sewerBranch);
+            Food proteinbar, berries, soda;
+            proteinbar = new Food("Proteinbar", "A protein bar made out of fibers and raisins.", 1, 5.0f, 10);
+            berries = new Food("Berries", "A pair of fresh berries", 3, 15.0f, 5);
+            soda = new Food("Soda", "A soda can replenishes thirst", 1, 5.0f, 5);
+            gasStation.GetInventory().AddItem(proteinbar);
+            gasStation.GetInventory().AddItem(berries);
+            gasStation.GetInventory().AddItem(soda);
 
-            office.setExit("west", lab);
-
-            player.SetCurrentRoom(outside);  // start game outside
+            sewerBranch.setExit("west", gasStation);
+            sewerBranch.LockRoom();
+            Key bluekey = new Key("BlueKeycard", "A Blue Keycard", 5, 5.0f);
+            sewerBranch.GetInventory().AddItem(bluekey);
+            player.SetCurrentRoom(beach);  // start game at beach
 		}
 
 
@@ -77,8 +95,8 @@ namespace ZuulCS
 		private void printWelcome()
 		{
 			Console.WriteLine();
-			Console.WriteLine("Welcome to Zuul!");
-			Console.WriteLine("Zuul is a new, incredibly boring adventure game.");
+			Console.WriteLine("Welcome to Rusty Text!");
+			Console.WriteLine("Rusty Text is a new, text version of Rust.");
 			Console.WriteLine("Type 'help' if you need help.");
 			Console.WriteLine();
 			Console.WriteLine(player.GetCurrentRoom().getLongDescription());
@@ -109,14 +127,14 @@ namespace ZuulCS
                     break;
                 case "look":
                     Console.WriteLine(player.GetCurrentRoom().getLongDescription());
-                    Console.WriteLine(player.GetCurrentRoom().GetInventory());
+                    Console.WriteLine(player.GetCurrentRoom().GetInventory().GetItems());
                     break;
                 case "status":
                     Console.WriteLine(player.Status());
-                    Console.WriteLine(player.GetInventory());
+                    Console.WriteLine(player.GetInventory().GetItems());
                     break;
                 case "take":
-                    if (player.GetWeight() <= player.GetCarryLimit())
+                    if (player.GetInventory().GetWeight() <= player.GetInventory().GetCarryLimit())
                     {
                         Take(command);
                     }
@@ -126,6 +144,9 @@ namespace ZuulCS
                     break;
                 case "use":
                     Use(command);
+                    break;
+                case "unlock":
+                    Unlock(command);
                     break;
                 case "quit":
 					wantToQuit = true;
@@ -145,7 +166,7 @@ namespace ZuulCS
 		private void printHelp()
 		{
 			Console.WriteLine("You are lost. You are alone.");
-			Console.WriteLine("You wander around at the university.");
+			Console.WriteLine("You wander around on the Island.");
 			Console.WriteLine();
 			Console.WriteLine("Your command words are:");
 			parser.showCommands();
@@ -173,9 +194,16 @@ namespace ZuulCS
 			} else {
                 if (player.IsAlive())
                 {
-                    player.SetCurrentRoom(nextRoom);
-                    player.Damage(5);
-                    Console.WriteLine(player.GetCurrentRoom().getLongDescription());
+                    if (!nextRoom.isLocked())
+                    {
+                        player.SetCurrentRoom(nextRoom);
+                        player.Damage(5);
+                        Console.WriteLine(player.GetCurrentRoom().getLongDescription());
+                    }
+                    else
+                    {
+                        Console.WriteLine("the door " + direction + " is locked");
+                    }
                 }
                 else
                 {
@@ -196,7 +224,7 @@ namespace ZuulCS
             string item = command.getSecondWord();
 
             // Try to leave current room.
-            Item toTake = player.GetCurrentRoom().RemoveItem(item);
+            Item toTake = player.GetCurrentRoom().GetInventory().RemoveItem(item);
 
             if (item == null)
             {
@@ -206,9 +234,15 @@ namespace ZuulCS
             {
                 if (player.IsAlive())
                 {
-                    player.AddItem(toTake);
-                    player.AddWeight(toTake.GetWeight());
-                    Console.WriteLine("player added: " + toTake.GetLongDescription());
+                    player.GetInventory().AddItem(toTake);
+                    if (toTake != null)
+                    {
+                        Console.WriteLine("player added: " + toTake.GetLongDescription());
+                    }
+                    else
+                    {
+                        Console.WriteLine("There is no item with this name!");
+                    }
                 }
                 else
                 {
@@ -229,7 +263,7 @@ namespace ZuulCS
             string item = command.getSecondWord();
 
             // Try to leave current room.
-            Item toDrop = player.RemoveItem(item);
+            Item toDrop = player.GetInventory().RemoveItem(item);
 
             if (item == null)
             {
@@ -239,7 +273,7 @@ namespace ZuulCS
             {
                 if (player.IsAlive())
                 {
-                    player.GetCurrentRoom().AddItem(toDrop);
+                    player.GetCurrentRoom().GetInventory().AddItem(toDrop);
                     Console.WriteLine("player dropped: " + toDrop.GetLongDescription());
                 }
                 else
@@ -260,7 +294,7 @@ namespace ZuulCS
             string item = command.getSecondWord();
 
             // Try to leave current room.
-            Item toUse = player.GetItem(item);
+            Item toUse = player.GetInventory().GetItem(item);
 
             if (item == null)
             {
@@ -270,7 +304,57 @@ namespace ZuulCS
             {
                 if (player.IsAlive())
                 {
-                    player.UseItem(toUse);
+                    player.GetInventory().UseItem(toUse , player);
+                }
+                else
+                {
+                    Console.WriteLine("you died " + player.GetCurrentRoom().getLongDescription());
+                }
+            }
+        }
+
+        private void Unlock(Command command)
+        {
+            if (!command.hasSecondWord())
+            {
+                // if there is no second word, we don't know where to go...
+                Console.WriteLine("Which room do you want to unlock?");
+                return;
+            }
+            if (!command.hasThirdWord())
+            {
+                // if there is no second word, we don't know where to go...
+                Console.WriteLine("Which key do you want to use?");
+                return;
+            }
+
+            string door = command.getSecondWord();
+            string key = command.getThirdWord();
+            Room toOpen;
+            Key toUse;
+            // Try to leave current room.
+            if (door == null)
+            {
+                Console.WriteLine("There is no door with this name: " + door + "!");
+            }
+            toOpen = player.GetCurrentRoom().getExit(door);
+            if (player.GetInventory().GetItem(key) is Key)
+            {
+                toUse = (Key)player.GetInventory().GetItem(key);
+                if (player.IsAlive())
+                {
+                    player.GetInventory().UseKey(player, toUse, toOpen);
+                }
+                else
+                {
+                    Console.WriteLine("you died " + player.GetCurrentRoom().getLongDescription());
+                }
+            }
+            else
+            {
+                if (player.IsAlive())
+                {
+                    Console.WriteLine("That's not a key");
                 }
                 else
                 {

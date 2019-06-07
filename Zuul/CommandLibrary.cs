@@ -20,6 +20,7 @@ namespace ZuulCS
                 "take",
                 "drop",
                 "use",
+                "unlock",
                 "help"
 			};
 		}

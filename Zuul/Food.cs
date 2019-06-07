@@ -24,13 +24,18 @@ namespace Zuul
         public override string GetUseDescription()
         {
             string useDescription = "";
-            useDescription = this.name + " and you lost:" + this.healing.ToString() + "health";
+            useDescription = this.name + " and you gain:" + this.healing.ToString() + "health";
             return useDescription;
         }
 
         public override void Use(Player p)
         {
             this.uses--;
+            if (p.GetHealth() + healing > 100)
+            {
+                p.SetHealth(100);
+            }
+            p.Heal(healing);
             Console.WriteLine(GetUseDescription());
         }
     }

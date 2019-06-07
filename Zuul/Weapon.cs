@@ -11,7 +11,6 @@ namespace Zuul
         private string name;
         private string description;
         private float weight;
-        private string effect;
         private int uses;
         private int damage;
         public Weapon(string name, string description, int uses, float weight, int damage) : base(name, description, uses, weight)
