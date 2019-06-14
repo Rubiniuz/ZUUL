@@ -11,18 +11,19 @@ namespace Zuul
     {
         Dictionary<string, Item> inventory = new Dictionary<string, Item>();
         private float carryLimit;
-        private float weight = 0;
         public Inventory(float cl)
         {
             carryLimit = cl;
         }
-        public void AddWeight(float w)
-        {
-            weight += w;
-        }
+       
         public float GetWeight()
         {
-            return weight;
+            float w = 0;
+            foreach(KeyValuePair<string, Item> entry in inventory)
+            {
+                w += entry.Value.GetWeight();
+            }
+            return w;
         }
         public float GetCarryLimit()
         {
@@ -34,7 +35,6 @@ namespace Zuul
             if (inventory.ContainsKey(n))
             {
                 item = inventory[n];
-                this.AddWeight(-item.GetWeight());
                 inventory.Remove(n);
                 return item;
             }
@@ -52,18 +52,20 @@ namespace Zuul
             else
             {
                 inventory[item.GetName()] = item;
-                this.AddWeight(item.GetWeight());
             }
         }
         public Item GetItem(string n)
         {
             Item item;
-            if (inventory[n] != null)
+            if (inventory.ContainsKey(n))
             {
                 item = inventory[n];
                 return item;
             }
-            return null;
+            else
+            {
+                return null;
+            }
         }
         public string GetItems()
         {
@@ -85,22 +87,24 @@ namespace Zuul
         public void UseItem(Item i , Player p)
         {
             Item item = i;
-            int u = item.GetUses();
-            Player player = p;
-            if (u > 1)
+            if (i != null)
             {
-                i.Use(p);
-            }
-            else if (u <= 1)
-            {
-                i.Use(p);
-                AddWeight(-i.GetWeight());
-                this.RemoveItem(item.GetName());
-                Console.WriteLine("Player used up the: " + item.GetName());
+                int u = item.GetUses();
+                Player player = p;
+                if (u > 1)
+                {
+                    i.Use(p);
+                }
+                else if (u <= 1)
+                {
+                    i.Use(p);
+                    this.RemoveItem(item.GetName());
+                    Console.WriteLine("Player used up the: " + item.GetName());
+                }
             }
             else
             {
-                Console.WriteLine("Item.ErrorMessage");
+                Console.WriteLine("I dont have that item.");
             }
         }
 
@@ -117,7 +121,6 @@ namespace Zuul
             else if (u <= 1)
             {
                 key.Unlock(r);
-                AddWeight(-k.GetWeight());
                 this.RemoveItem(k.GetName());
                 Console.WriteLine("Player used up the: " + k.GetName() + " but was able to unlock the room");
             }

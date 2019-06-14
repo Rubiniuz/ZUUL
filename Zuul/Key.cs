@@ -13,7 +13,8 @@ namespace Zuul
         private string description;
         private float weight;
         private int uses;
-        public Key(string name, string description, int uses, float weight) : base(name, description, uses, weight)
+        private int tier;
+        public Key(string name, string description, int uses, float weight, int tier) : base(name, description, uses, weight)
         {
             this.name = name;
             this.description = description;
@@ -23,13 +24,16 @@ namespace Zuul
         public override string GetUseDescription()
         {
             string useDescription = "";
-            useDescription = "Key that is used to unlock a room";
+            useDescription = "Key that is used to unlock a room. use the command unlock";
             return useDescription;
         }
-
-        public override void Use(Player p)
+        public void SetTier(int tier)
         {
-            Console.WriteLine(GetUseDescription());
+            this.tier = tier;
+        }
+        public int GetTier()
+        {
+            return tier;
         }
 
         public string Unlock(object o)

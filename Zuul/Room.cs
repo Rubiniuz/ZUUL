@@ -8,23 +8,42 @@ namespace ZuulCS
         Inventory inventory = new Inventory(100);
         private string description;
         private bool locked;
-		private Dictionary<string, Room> exits; // stores exits of this room.
+        private int tier;
+        private Dictionary<string, Room> exits; // stores exits of this room.
+        private ResourceNode node;
 
 		/**
 	     * Create a room described "description". Initially, it has no exits.
 	     * "description" is something like "in a kitchen" or "in an open court
 	     * yard".
 	     */
-		public Room(string description)
+		public Room(string description,int tier)
 		{
 			this.description = description;
+            this.tier = tier;
 			exits = new Dictionary<string, Room>();
 		}
+        public ResourceNode Node
+        {
+            get { return node; }
 
-		/**
+            set
+            { node = value; }
+        }
+
+        public void SetTier(int tier)
+        {
+            this.tier = tier;
+        }
+        public int GetTier()
+        {
+            return tier;
+        }
+
+        /**
 	     * Define an exit from this room.
 	     */
-		public void setExit(string direction, Room neighbor)
+        public void setExit(string direction, Room neighbor)
 		{
 			exits[direction] = neighbor;
 		}
@@ -58,12 +77,29 @@ namespace ZuulCS
 	     */
 		public string getLongDescription()
 		{
-			string returnstring = "You are ";
+			string returnstring = "You location is: ";
 			returnstring += description;
 			returnstring += ".\n";
 			returnstring += getExitstring();
             return returnstring;
 		}
+
+        public string GetResourceNode()
+        {
+            if (node != null)
+            {
+                string returnstring = " ";
+                returnstring += node.GetName();
+                return returnstring;
+            }
+            else
+            {
+                string returnstring = " ";
+                returnstring = "There is no Resource in this room";
+                return returnstring;
+            }
+            
+        }
 
         /**
 	     * Return a string describing the room's exits, for example

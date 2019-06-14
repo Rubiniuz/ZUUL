@@ -44,7 +44,7 @@ namespace Zuul
             {
                 return "The player is not alive";
             }
-            return "The Player is alive." + " The Player has: " + health.ToString() + " health remaining. The Player has: " + (inventory.GetCarryLimit() - inventory.GetWeight()).ToString() + " weight remaining.";
+            return "The Player is alive." + " The Player has: " + health.ToString() + " health remaining. The Player has: " + (inventory.GetCarryLimit() - inventory.GetWeight()) + " weight remaining.";
         }
         public bool IsAlive()
         {
