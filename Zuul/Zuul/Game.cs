@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Zuul;
+using System.Drawing;
+using Console = Colorful.Console;
+using Colorful;
 
 namespace ZuulCS
 {
@@ -9,11 +12,11 @@ namespace ZuulCS
 		private Parser parser;
         private Player player;
 
-		public Game ()
+        public Game ()
 		{
             player = new Player();
-            Weapon rock = new Weapon("Rock", "A blunt rock with sharp edges used to smash heads and gather resources", 25, 15.0f, 10);
-            Item torch = new Item("Torch", "A torch that can be lit", 10, 7.5f);
+            Weapon rock = new Weapon("rock", "A blunt rock with sharp edges used to smash heads and gather resources", 25, 15.0f, 10);
+            Item torch = new Item("torch", "A torch that can be lit", 10, 7.5f);
             player.GetInventory().AddItem(rock);
             player.GetInventory().AddItem(torch);
             parser = new Parser();
@@ -23,31 +26,55 @@ namespace ZuulCS
 		private void createRooms()
 		{
             // create the rooms
-            Room b3 = new Room("at a local junkyard. your at B3");
-            Room c2 = new Room("at Sewer branch. your at C2");
-            Room c3 = new Room("at Launchsite. your at C3");
-            Room c4 = new Room("at the trainyard. your at C4");
-            Room d3 = new Room("at the military tunnels. your at D3");
-            Room b2 = new Room("at a local spermket. your at B2");
-            Room b4 = new Room("at a local gas station. your at B4");
-            Room d4 = new Room("at a local spermket. your at D4");
-            Room d2 = new Room("at a local gas station. your at D2");
-            Room a1 = new Room("at the beach the spawn place for all nakeds. your at A1");
-            Room a2 = new Room("at the beach the spawn place for all nakeds. your at A2");
-            Room a3 = new Room("at the beach the spawn place for all nakeds. your at A3");
-            Room a4 = new Room("at the beach the spawn place for all nakeds. your at A4");
-            Room a5 = new Room("at the beach the spawn place for all nakeds. your at A5");
-            Room b1 = new Room("at the beach the spawn place for all nakeds. your at B1");
-            Room b5 = new Room("at the beach the spawn place for all nakeds. your at B5");
-            Room c1 = new Room("at the beach the spawn place for all nakeds. your at C1");
-            Room c5 = new Room("at the beach the spawn place for all nakeds. your at C5");
-            Room d1 = new Room("at the beach the spawn place for all nakeds. your at D1");
-            Room d5 = new Room("at the beach the spawn place for all nakeds. your at D5");
-            Room e1 = new Room("at the beach the spawn place for all nakeds. your at E1");
-            Room e2 = new Room("at the beach the spawn place for all nakeds. your at E2");
-            Room e3 = new Room("at the beach the spawn place for all nakeds. your at E3");
-            Room e4 = new Room("at the beach the spawn place for all nakeds. your at E4");
-            Room e5 = new Room("at the beach the spawn place for all nakeds. your at E5");
+            Room b3 = new Room("B3. at a local junkyard.", 0);
+            Key b3key = new Key("greenkey","A greenkeycard to open low tier doors",2,5.0f,1);
+            b3.GetInventory().AddItem(b3key);
+            Room c2 = new Room("C2. at Sewer branch.", 1);
+            Key c2key = new Key("bluekey", "A blue keycard to open mid tier doors", 2, 5.0f,2);
+            c2.GetInventory().AddItem(c2key);
+            c2.LockRoom();
+            Room underc2 = new Room("C2 Basement. under Sewer branch.", 2);
+            underc2.LockRoom();
+            Room c3 = new Room("C3. at Launchsite.",3);
+            c3.LockRoom();
+            Room c4 = new Room("C4. at the trainyard.", 2);
+            Key c4key = new Key("redkey", "A red keycard to open high tier doors", 2, 5.0f, 3);
+            c4.GetInventory().AddItem(c4key);
+            c4.LockRoom();
+            Room d3 = new Room("D3. at the military tunnels.", 3);
+            Key d3key = new Key("masterkey", "A master keycard to open all doors", 999, 15.0f, 5);
+            d3.GetInventory().AddItem(d3key);
+            d3.LockRoom();
+            Room b2 = new Room("B2. at a local spermket.", 0);
+            Key b2key = new Key("greenkey", "A greenkeycard to open low tier doors", 2, 5.0f, 1);
+            b2.GetInventory().AddItem(b2key);
+            Room b4 = new Room("B4. at a local gas station.", 0);
+            Key b4key = new Key("greenkey", "A greenkeycard to open low tier doors", 2, 5.0f, 1);
+            b4.GetInventory().AddItem(b4key);
+            Room d4 = new Room("D4. at a local spermket.", 0);
+            Key d4key = new Key("greenkey", "A greenkeycard to open low tier doors", 2, 5.0f, 1);
+            d4.GetInventory().AddItem(d4key);
+            Room d2 = new Room("D2. at a local gas station.", 0);
+            Key d2key = new Key("greenkey", "A greenkeycard to open low tier doors", 2, 5.0f, 1);
+            d2.GetInventory().AddItem(d2key);
+            
+
+           Room a1 = new Room("A1. the beach. the spawn place for all nakeds.", 0);
+            Room a2 = new Room("A2. the beach. the spawn place for all nakeds.", 0);
+            Room a3 = new Room("A3. the beach. the spawn place for all nakeds.", 0);
+            Room a4 = new Room("A4. the beach. the spawn place for all nakeds.", 0);
+            Room a5 = new Room("A5. the beach. the spawn place for all nakeds.", 0);
+            Room b1 = new Room("B1. the beach. the spawn place for all nakeds.", 0);
+            Room b5 = new Room("B5. the beach. the spawn place for all nakeds.", 0);
+            Room c1 = new Room("C1. the beach. the spawn place for all nakeds.", 0);
+            Room c5 = new Room("C5. the beach. the spawn place for all nakeds.", 0);
+            Room d1 = new Room("D1. the beach. the spawn place for all nakeds.", 0);
+            Room d5 = new Room("D5. the beach. the spawn place for all nakeds.", 0);
+            Room e1 = new Room("E1. the beach. the spawn place for all nakeds.", 0);
+            Room e2 = new Room("E2. the beach. the spawn place for all nakeds.", 0);
+            Room e3 = new Room("E3. the beach. the spawn place for all nakeds.", 0);
+            Room e4 = new Room("E4. the beach. the spawn place for all nakeds.", 0);
+            Room e5 = new Room("E5. the beach. the spawn place for all nakeds.", 0);
 
             //layer 1
             a1.setExit("east", b1);
@@ -82,6 +109,9 @@ namespace ZuulCS
             c2.setExit("north", c1);
             c2.setExit("east", d2);
             c2.setExit("west", b2);
+            c2.setExit("down", underc2);
+
+            underc2.setExit("up", c2);
 
             d2.setExit("north", d1);
             d2.setExit("south", d3);
@@ -158,13 +188,6 @@ namespace ZuulCS
 
             e5.setExit("west", b5);
             e5.setExit("north", e4);
-
-            // initialise room exits and give items to rooms
-            //beach.setExit("east", mainRoad);
-            //launchsite.LockRoom();
-            //launchsite.SetTier(3);
-            //Food chocolatebar;
-            //chocolatebar = new Food("Chocolate","A chocolate bar made out of cocoa milk and sugar.",1,5.0f,10);
             
             player.SetCurrentRoom(a1);  // start game at beach
 		}
@@ -192,11 +215,27 @@ namespace ZuulCS
 	     */
 		private void printWelcome()
 		{
-			Console.WriteLine();
-			Console.WriteLine("Welcome to Rusty Text!");
-			Console.WriteLine("Rusty Text is a new, text version of Rust.");
-			Console.WriteLine("Type 'help' if you need help.");
-			Console.WriteLine();
+            
+            Console.WriteLine();
+            // ascii text
+            int rC = 183;
+            int gC = 65;
+            int bC = 14;
+            
+            Console.WriteAscii("Rusty Text!", Color.FromArgb(rC, gC, bC));
+            // normal text
+            Console.WriteLine();
+            string start = "Welcome to: {0} This is a text version of {1}.";
+            string info = "Type {2} if you need help.";
+            Formatter[] welcome = new Formatter[]
+            {
+                new Formatter("Rusty Text!", Color.Red),
+                new Formatter("Rust", Color.Red),
+                new Formatter("help", Color.ForestGreen),
+            };
+            Console.WriteLineFormatted(start, Color.White, welcome);
+            Console.WriteLineFormatted(info, Color.White, welcome);
+            Console.WriteLine();
 			Console.WriteLine(player.GetCurrentRoom().getLongDescription());
 		}
 
@@ -225,6 +264,7 @@ namespace ZuulCS
                     break;
                 case "look":
                     Console.WriteLine(player.GetCurrentRoom().getLongDescription());
+                    //Console.WriteLine(player.GetCurrentRoom().GetResourceNode()); not correctly implemented yet               W.I.P
                     Console.WriteLine(player.GetCurrentRoom().GetInventory().GetItems());
                     break;
                 case "status":
@@ -242,6 +282,12 @@ namespace ZuulCS
                     break;
                 case "use":
                     Use(command);
+                    break;
+                case "mine":
+                    Console.WriteLine("W.I.P");
+                    break;
+                case "map":
+                    ShowMap();
                     break;
                 case "unlock":
                     Unlock(command);
@@ -442,7 +488,15 @@ namespace ZuulCS
                 toUse = (Key)player.GetInventory().GetItem(key);
                 if (player.IsAlive())
                 {
-                    player.GetInventory().UseKey(player, toUse, toOpen);
+                    if (player.GetCurrentRoom().GetTier() <= toUse.GetTier())
+                    {
+                        player.GetInventory().UseKey(player, toUse, toOpen);
+                    }
+                    else
+                    {
+                        Console.WriteLine("That Key is not strong enough for this door");
+                    }
+                    
                 }
                 else
                 {
@@ -461,5 +515,118 @@ namespace ZuulCS
                 }
             }
         }
+        public string ShowMap2()
+        {
+            string mapString = "";
+            mapString += "O============================================O";
+            mapString += "\n";
+            mapString += "| X====X   X====X   X====X   X====X   X====X |";
+            mapString += "\n";
+            mapString += "| | A1 | = | B1 | = | C1 | = | D1 | = | E1 | |";
+            mapString += "\n";
+            mapString += "| X====X   X====X   X====X   X====X   X====X |";
+            mapString += "\n";
+            mapString += "|   ||       ||       ||       ||       ||   |";
+            mapString += "\n";
+            mapString += "| X====X   X====X   X====X   X====X   X====X |";
+            mapString += "\n";
+            mapString += "| | A2 | = | B2 | = | C2 | = | D2 | = | E2 | |";
+            mapString += "\n";
+            mapString += "| X====X   X====X   X====X   X====X   X====X |";
+            mapString += "\n";
+            mapString += "|   ||       ||       ||       ||       ||   |";
+            mapString += "\n";
+            mapString += "| X====X   X====X   X====X   X====X   X====X |";
+            mapString += "\n";
+            mapString += "| | A3 | = | B3 | = | C3 | = | D3 | = | E3 | |";
+            mapString += "\n";
+            mapString += "| X====X   X====X   X====X   X====X   X====X |";
+            mapString += "\n";
+            mapString += "|   ||       ||       ||       ||       ||   |";
+            mapString += "\n";
+            mapString += "| X====X   X====X   X====X   X====X   X====X |";
+            mapString += "\n";
+            mapString += "| | A4 | = | B4 | = | C4 | = | D4 | = | E4 | |";
+            mapString += "\n";
+            mapString += "| X====X   X====X   X====X   X====X   X====X |";
+            mapString += "\n";
+            mapString += "|   ||       ||       ||       ||       ||   |";
+            mapString += "\n";
+            mapString += "| X====X   X====X   X====X   X====X   X====X |";
+            mapString += "\n";
+            mapString += "| | A5 | = | B5 | = | C5 | = | D5 | = | E5 | |";
+            mapString += "\n";
+            mapString += "| X====X   X====X   X====X   X====X   X====X |";
+            mapString += "\n";
+            mapString += "O============================================O";
+            mapString += "\n";
+            mapString += "Your current location is: " + player.GetCurrentRoom().getShortDescription();
+            return mapString;
+        }
+
+        public void ShowMap()
+        {
+            Console.ForegroundColor = Color.White;
+            string topbottom = "O==================================O";
+            string breakLine = "|                                  |";
+            string line = "| |{0}| = |{1}| = |{2}| = |{3}| = |{4}| |";
+            string between = "|  ||     ||     ||     ||     ||  |";
+            Formatter[] line1 = new Formatter[]
+            {
+                new Formatter("A1", Color.Black),
+                new Formatter("B1", Color.Black),
+                new Formatter("C1", Color.Black),
+                new Formatter("D1", Color.Black),
+                new Formatter("E1", Color.Black)
+            };
+            Formatter[] line2 = new Formatter[]
+            {
+                new Formatter("A2", Color.Black),
+                new Formatter("B2", Color.ForestGreen),
+                new Formatter("C2", Color.ForestGreen),
+                new Formatter("D2", Color.ForestGreen),
+                new Formatter("E2", Color.Black)
+            };
+            Formatter[] line3 = new Formatter[]
+            {
+                new Formatter("A3", Color.Black),
+                new Formatter("B3", Color.Red),
+                new Formatter("C3", Color.Red),
+                new Formatter("D3", Color.Red),
+                new Formatter("E3", Color.Black)
+            };
+            Formatter[] line4 = new Formatter[]
+            {
+                new Formatter("A4", Color.Black),
+                new Formatter("B4", Color.ForestGreen),
+                new Formatter("C4", Color.Red),
+                new Formatter("D4", Color.ForestGreen),
+                new Formatter("E4", Color.Black)
+            };
+            Formatter[] line5 = new Formatter[]
+            {
+                new Formatter("A5", Color.Black),
+                new Formatter("B5", Color.Black),
+                new Formatter("C5", Color.Black),
+                new Formatter("D5", Color.Black),
+                new Formatter("E5", Color.Black)
+            };
+            Console.BackgroundColor = Color.LightBlue;
+            Console.WriteLine(topbottom, Color.Black);
+            Console.WriteLine(breakLine, Color.Black);
+            Console.WriteLineFormatted(line, Color.Black, line1);
+            Console.WriteLine(between, Color.Black);
+            Console.WriteLineFormatted(line, Color.Black, line2);
+            Console.WriteLine(between, Color.Black);
+            Console.WriteLineFormatted(line, Color.Black, line3);
+            Console.WriteLine(between, Color.Black);
+            Console.WriteLineFormatted(line, Color.Black, line4);
+            Console.WriteLine(between, Color.Black);
+            Console.WriteLineFormatted(line, Color.Black, line5);
+            Console.WriteLine(breakLine, Color.Black);
+            Console.WriteLine(topbottom, Color.Black);
+            Console.ResetColor();
+        }
+
     }
 }

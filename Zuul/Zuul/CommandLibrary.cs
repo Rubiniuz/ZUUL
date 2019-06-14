@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Drawing;
+using Console = Colorful.Console;
+using Colorful;
 
 namespace ZuulCS
 {
@@ -21,6 +24,8 @@ namespace ZuulCS
                 "drop",
                 "use",
                 "unlock",
+                "mine",
+                "map",
                 "help"
 			};
 		}
@@ -46,7 +51,7 @@ namespace ZuulCS
 		public void showAll()
 		{
 			for(int i = 0; i < validCommands.Length; i++) {
-				Console.Write(validCommands[i]);
+				Console.Write(validCommands[i], Color.ForestGreen);
 				if (i != validCommands.Length - 1) {
 					Console.Write(", ");
 				}

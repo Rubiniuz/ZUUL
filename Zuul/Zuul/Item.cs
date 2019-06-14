@@ -20,7 +20,7 @@ namespace Zuul
             this.weight = weight;
         }
 
-        public float GetWeight()
+        public virtual float GetWeight()
         {
             return weight;
         }

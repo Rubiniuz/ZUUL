@@ -20,6 +20,10 @@ namespace Zuul
         {
             weight += w;
         }
+        public void RemoveWeight(float w)
+        {
+            weight -= w;
+        }
         public float GetWeight()
         {
             return weight;

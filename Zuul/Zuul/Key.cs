@@ -27,6 +27,14 @@ namespace Zuul
             useDescription = "Key that is used to unlock a room. use the command unlock";
             return useDescription;
         }
+        public void SetTier(int tier)
+        {
+            this.tier = tier;
+        }
+        public int GetTier()
+        {
+            return tier;
+        }
 
         public override void Use(Player p)
         {
