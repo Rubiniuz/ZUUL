@@ -58,7 +58,6 @@ namespace Zuul
         
         public virtual void Use(Player p)
         {
-            this.uses--;
             Console.WriteLine(GetUseDescription());
         }
     }

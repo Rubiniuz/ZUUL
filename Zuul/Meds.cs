@@ -6,35 +6,32 @@ using System.Threading.Tasks;
 
 namespace Zuul
 {
-    public class Food : Item
+    public class Meds : Item
     {
         private string name;
         private string description;
         private float weight;
         private int uses;
-        private int healing;
-        public Food(string name, string description, int uses, float weight, int healing) : base(name, description, uses, weight)
+        public Meds(string name, string description, int uses, float weight) : base(name, description, uses, weight)
         {
             this.name = name;
             this.description = description;
             this.uses = uses;
             this.weight = weight;
-            this.healing = healing;
         }
         public override string GetUseDescription()
         {
             string useDescription = "";
-            useDescription = this.name + " and you gain:" + this.healing.ToString() + "health";
+            useDescription = "you used: " + this.name + " and you stop the bleeding";
             return useDescription;
         }
 
         public override void Use(Player p)
         {
-            if (p.GetHealth() + healing > 100)
+            if (p.Bleeding)
             {
-                p.SetHealth(100);
+                p.Bleeding = false;
             }
-            p.Heal(healing);
             Console.WriteLine(GetUseDescription());
         }
     }

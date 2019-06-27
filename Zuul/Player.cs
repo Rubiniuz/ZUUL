@@ -13,6 +13,7 @@ namespace Zuul
         private int health = 100;
         private Room currentRoom;
         private bool isAlive;
+        private bool bleeding;
         public Player()
         {
             
@@ -57,6 +58,15 @@ namespace Zuul
                 isAlive = true;
             }
             return isAlive;
+        }
+        public bool Bleeding
+        {
+            get { return bleeding; }
+
+            set
+            {
+                bleeding = value;
+            }
         }
         public float GetHealth()
         {

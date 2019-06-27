@@ -11,10 +11,12 @@ namespace ZuulCS
 	{
 		private Parser parser;
         private Player player;
+        bool finished;
 
         public Game ()
 		{
             player = new Player();
+            player.Bleeding = true;
             Weapon rock = new Weapon("rock", "A blunt rock with sharp edges used to smash heads and gather resources", 25, 15.0f, 10);
             Item torch = new Item("torch", "A torch that can be lit", 10, 7.5f);
             player.GetInventory().AddItem(rock);
@@ -27,7 +29,9 @@ namespace ZuulCS
 		{
             // create the rooms
             Room b3 = new Room("B3. at a local junkyard.", 0);
+            Meds bandage = new Meds("bandage","stops the bleeding",2,1.0f);
             Key b3key = new Key("greenkey","A greenkeycard to open low tier doors",2,5.0f,1);
+            b3.GetInventory().AddItem(bandage);
             b3.GetInventory().AddItem(b3key);
             Room c2 = new Room("C2. at Sewer branch.", 1);
             Key c2key = new Key("bluekey", "A blue keycard to open mid tier doors", 2, 5.0f,3);
@@ -136,6 +140,10 @@ namespace ZuulCS
             c3.setExit("north", c2);
             c3.setExit("east", d3);
             c3.setExit("west", b3);
+            Room portalexit = new Room("space. the universe is all u see. the place where you will die.", 0);
+            c3.setExit("portal", portalexit);
+            Room empty = new Room("quit", 0);
+            portalexit.setExit("quit" , empty);
 
             d3.setExit("north", d2);
             d3.setExit("south", d4);
@@ -200,10 +208,11 @@ namespace ZuulCS
 		{
 			printWelcome();
 
-			// Enter the main command loop.  Here we repeatedly read commands and
-			// execute them until the game is over.
-			bool finished = false;
-			while (! finished) {
+            // Enter the main command loop.  Here we repeatedly read commands and
+            // execute them until the game is over.
+            finished = false;
+
+            while (! finished) {
                 Command command = parser.getCommand();
                 finished = processCommand(command);
             }
@@ -330,30 +339,51 @@ namespace ZuulCS
 
 			string direction = command.getSecondWord();
 
-			// Try to leave current room.
-			Room nextRoom = player.GetCurrentRoom().getExit(direction);
+            if (direction == "quit")
+            {
+                finished = true;
+                player.Heal(-10000);
+                Console.WriteLine("the game ended use the command quit to exit the game. Thank you for playing");
+            }
+            else
+            {
+                Room nextRoom = player.GetCurrentRoom().getExit(direction);
 
-			if (nextRoom == null) {
-				Console.WriteLine("There is no door to "+direction+"!");
-			} else {
-                if (player.IsAlive())
+                if (nextRoom == null)
                 {
-                    if (!nextRoom.isLocked())
-                    {
-                        player.SetCurrentRoom(nextRoom);
-                        player.Damage(5);
-                        Console.WriteLine(player.GetCurrentRoom().getLongDescription());
-                    }
-                    else
-                    {
-                        Console.WriteLine("the door " + direction + " is locked");
-                    }
+                    Console.WriteLine("There is no door to " + direction + "!");
                 }
                 else
                 {
-                    Console.WriteLine("you died " + player.GetCurrentRoom().getLongDescription());
+                    if (player.IsAlive())
+                    {
+                        if (!nextRoom.isLocked())
+                        {
+                            if (player.Bleeding)
+                            {
+                                player.Damage(5);
+                                player.SetCurrentRoom(nextRoom);
+                                Console.WriteLine(player.GetCurrentRoom().getLongDescription());
+                            }
+                            else
+                            {
+                                player.SetCurrentRoom(nextRoom);
+                                Console.WriteLine(player.GetCurrentRoom().getLongDescription());
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("the door " + direction + " is locked");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("you died " + player.GetCurrentRoom().getLongDescription());
+                    }
                 }
-			}
+            }
+
+            
 		}
 
         private void Take(Command command)

@@ -30,7 +30,6 @@ namespace Zuul
 
         public override void Use(Player p)
         {
-            this.uses--;
             p.Damage(damage);
             Console.WriteLine(GetUseDescription());
         }

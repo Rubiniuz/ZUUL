@@ -9,7 +9,7 @@ namespace Zuul
 {
     public class Inventory
     {
-        Dictionary<string, Item> inventory = new Dictionary<string, Item>();
+        private Dictionary<string, Item> inventory = new Dictionary<string, Item>();
         private float carryLimit;
         public Inventory(float cl)
         {
@@ -86,20 +86,27 @@ namespace Zuul
         }
         public void UseItem(Item i , Player p)
         {
+            Player player = p;
             Item item = i;
             if (i != null)
             {
-                int u = item.GetUses();
-                Player player = p;
-                if (u > 1)
+                if (item.GetUses() <= 0)
                 {
-                    i.Use(p);
+                    this.RemoveItem(i.GetName());
+                    Console.WriteLine("player used up: " + i.GetName());
                 }
-                else if (u <= 1)
+
+                if (item.GetUses() == 1)
                 {
                     i.Use(p);
-                    this.RemoveItem(item.GetName());
-                    Console.WriteLine("Player used up the: " + item.GetName());
+                    this.RemoveItem(i.GetName());
+                    Console.WriteLine("player used up: " + i.GetName());
+                }
+                
+                if (item.GetUses() >= 2)
+                {
+                    i.SetUses(i.GetUses() - 1);
+                    i.Use(p);
                 }
             }
             else

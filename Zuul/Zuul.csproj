@@ -55,6 +55,7 @@
     <Compile Include="Inventory.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Key.cs" />
+    <Compile Include="Meds.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
